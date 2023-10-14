@@ -5,8 +5,12 @@ import Homepage from '../../pages/Homepage';
 import Searchpage from '../../pages/Searchpage';
 import Notificationpage from '../../pages/Notificationpage';
 import Profilepages from '../../pages/Profilepages';
+import DetailSearch from '../layouts/DetailSearch';
+import { createStackNavigator } from '@react-navigation/stack';
+import SplashScreen from '../layouts/MySplashScreen';
 
 const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
 const Navigation = () => {
   return (
     <Tab.Navigator
@@ -58,8 +62,27 @@ const Navigation = () => {
     </Tab.Navigator>
   );
 };
-
-export default Navigation;
+export const Stacknavigation = () => {
+  return (
+    
+    <Stack.Navigator initialRouteName="Spalash">
+      <Stack.Screen
+        name="splash"
+        component={SplashScreen}
+      />
+      <Stack.Screen
+        name="details"
+        component={DetailSearch}
+      />
+    </Stack.Navigator>
+  );
+};
+// buat agar bisa di gugnkan walaupun komponent tidak ada si tab naviagtor atau buat komponent yang ada di tab avigaot hidden
+const Nav = {
+  Stacknavigation,
+  Navigation,
+};
+export default Nav;
 
 const styles = StyleSheet.create({
   container: {

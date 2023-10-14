@@ -9,6 +9,7 @@ const Homelayout = () => {
   const [items, setItems] = useState([]);
   const [itemsmini, setItemsmini] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [dataRand, setDataRand] = useState(['bird', 'dog', 'beauty-girl', 'meme']);
 
   useEffect(() => {
     ShowsRandomImage((data) => {
@@ -31,40 +32,91 @@ const Homelayout = () => {
     });
   }, []);
 
+  const fetchMoreData = async () => {
+    if (isLoading) return;
+
+    setIsLoading(true);
+    // console.log(dataRand);
+    // buat agar data diambil secara urut agar rand image berbeda output
+    await ShowsRandomImage((data, i) => {
+      const dataArray = data.hits;
+
+      if (dataArray && dataArray.length > 0) {
+        setItems((prevItems) => [...prevItems, ...dataArray]);
+      }
+    });
+    await ShowsRandomImagemini((data, i) => {
+      const dataArray = data.hits;
+
+      if (dataArray && dataArray.length > 0) {
+        setItemsmini((prevItems) => [...prevItems, ...dataArray]);
+      }
+    });
+
+    setIsLoading(false);
+  };
+
   return (
     <>
       <Text style={styles.text}>Semua</Text>
       <ScrollView
-        scrollEventThrottle={1}
+        scrollEventThrottle={16} // Biasanya 16 adalah nilai yang baik untuk ini
         onScroll={(e) => {
           const { layoutMeasurement, contentOffset, contentSize } = e.nativeEvent;
-          const isEndReached = layoutMeasurement.height + contentOffset.y >= contentSize.height;
+          const isEndReached = layoutMeasurement.height + contentOffset.y >= contentSize.height - 50; // Meningkatkan threshold untuk lebih responsif
+          if (isEndReached) {
+            fetchMoreData();
+          }
+        }}
+        onMomentumScrollEnd={(e) => {
+          // Ini akan memastikan bahwa fungsi dipanggil saat pengguna berhenti menggulir
+          const { layoutMeasurement, contentOffset, contentSize } = e.nativeEvent;
+          const isEndReached = layoutMeasurement.height + contentOffset.y >= contentSize.height - 50;
+          if (isEndReached) {
+            fetchMoreData();
+          }
         }}>
         <View style={styles.container}>
           <ContentMainCard>
-            <View style={{ flex: 1, flexDirection: 'row', gap: 5 }}>
-              <View style={{ flex: 1 }}>
-                {items.length > 0 &&
-                  items.map((e) => (
-                    <MyCard
-                      img={e.webformatURL}
-                      key={e.id}
-                      title={e.user}
-                    />
-                  ))}
-              </View>
-              <View style={{ flex: 1 }}>
-                {itemsmini.length > 0 &&
-                  itemsmini.map((e) => (
-                    <MyMiniCard
-                      img={e.webformatURL}
-                      key={e.id}
-                      title={e.user}
-                    />
-                  ))}
-              </View>
-            </View>
+            {items.length > 0 &&
+              items.map((e, index) => (
+                <View
+                  key={`${e.id}-${index}`}
+                  style={{
+                    flexDirection: index % 2 === 0 ? 'row' : 'row-reverse',
+                    justifyContent: 'space-around',
+                    marginBottom: 10, // Anda bisa menyesuaikan ini
+                  }}>
+                  <MyCard
+                    img={e.webformatURL}
+                    title={e.user}
+                    style={{ width: '48%' }} // Anda bisa menyesuaikan ini
+                  />
+                  <View>
+                    {itemsmini[index] && (
+                      <MyMiniCard
+                        img={itemsmini[index].webformatURL}
+                        title={itemsmini[index].user}
+                        style={{ width: '48%' }} // Anda bisa menyesuaikan ini
+                      />
+                    )}
+                    {itemsmini[index] && (
+                      <MyMiniCard
+                        img={itemsmini[index].webformatURL}
+                        title={itemsmini[index].user}
+                        style={{ width: '48%' }} // Anda bisa menyesuaikan ini
+                      />
+                    )}
+                  </View>
+                </View>
+              ))}
           </ContentMainCard>
+          {isLoading && (
+            <ActivityIndicator
+              size="large"
+              color="#0000ff"
+            />
+          )}
         </View>
       </ScrollView>
     </>

@@ -24,7 +24,7 @@ export default MyCard;
 
 const styles = StyleSheet.create({
   container: {
-    width: 174,
+    width: 154,
     display: 'flex',
   },
   bodyCard: {

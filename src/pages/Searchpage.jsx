@@ -1,11 +1,13 @@
 import { StyleSheet, Text, View } from 'react-native';
-import React from 'react';
-import Searchlayout from '../components/layouts/Searchlayout';
+import React, { useState } from 'react';
+import Searchlayout, { Search } from '../components/layouts/Searchlayout';
+import DetailSearch from '../components/layouts/DetailSearch';
 
 const Searchpage = () => {
   return (
     <View>
-      <Searchlayout />
+      <Searchlayout/>
+      
     </View>
   );
 };
