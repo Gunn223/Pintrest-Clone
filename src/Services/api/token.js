@@ -1,4 +1,4 @@
 const ApiEndpoint = 'https://pixabay.com/api/';
 
-const token = '39824461-3e18dab629b833ede78c55a26';
+const token = 'secret to acces this token inbox me : )';
 export { ApiEndpoint, token };
