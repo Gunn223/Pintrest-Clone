@@ -2,8 +2,8 @@ import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer } from '@react-navigation/native';
 import { StyleSheet, View } from 'react-native';
 import Nav from './src/components/fragment/Navigation';
-import React, { useEffect } from 'react';
-import SplashScreen from 'react-native-splash-screen';
+import React from 'react';
+
 
 export default function App() {
   return (

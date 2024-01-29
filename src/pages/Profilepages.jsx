@@ -5,7 +5,7 @@ import Profilelayout from '../components/layouts/Profilelayout';
 const Profilepages = () => {
   return (
     <View>
-      <Profilelayout/>
+      <Profilelayout />
     </View>
   );
 };

@@ -1,13 +1,26 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity, Alert } from 'react-native';
 import React from 'react';
 import Mybutton from '../elemenets/Mybutton';
+import { Feather } from '@expo/vector-icons';
 
 const Profilelayout = () => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text>icon1</Text>
-        <Text>icon2</Text>
+        <TouchableOpacity>
+          <Feather
+            name="bookmark"
+            size={29}
+            color="black"
+          />
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <Feather
+            name="settings"
+            size={29}
+            color="black"
+          />
+        </TouchableOpacity>
       </View>
       <View style={styles.body}>
         <View style={styles.bodyProfile}>
@@ -42,8 +55,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
   },
   header: {
-    gap: 5,
-    marginTop: 35,
+    gap: 15,
+    marginTop: 55,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'flex-end',
@@ -68,7 +81,7 @@ const styles = StyleSheet.create({
   },
   bodyprofilep: {
     fontSize: 12,
-    
+
     fontWeight: '200',
   },
   bodytextpcontent: {

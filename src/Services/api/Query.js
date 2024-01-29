@@ -1,5 +1,10 @@
 import axios from 'axios';
 import { token, ApiEndpoint } from './token';
+export const generateRandomWord = () => {
+  const words = ['dog', 'car', 'tree', 'beach', 'book', 'computer', 'mountain', 'ocean', 'guitar', 'flower'];
+  const randomIndex = Math.floor(Math.random() * words.length);
+  return words[randomIndex];
+};
 
 export const ShowsRandomImage = async (data, q) => {
   try {
@@ -7,7 +12,7 @@ export const ShowsRandomImage = async (data, q) => {
     const params = {
       key: token,
       per_page: limitPerReq,
-      q: 'Women',
+      q: generateRandomWord(),
     };
     const res = await axios.get(ApiEndpoint, { params });
 
@@ -16,21 +21,21 @@ export const ShowsRandomImage = async (data, q) => {
     console.log(error);
   }
 };
-export const ShowsRandomImagemini = async (data) => {
+export const ShowsRandomImagemini = async (query, dataCallback) => {
   try {
     const limitPerReq = 20;
     const params = {
       key: token,
       per_page: limitPerReq,
-      q: 'cat',
+      q: query,
     };
     const res = await axios.get(ApiEndpoint, { params });
-
-    data(res.data);
+    dataCallback(res.data);
   } catch (error) {
     console.log(error);
   }
 };
+
 // tambah untuk generate gambar random yang berbeda id
 
 export const SearchImage = async (q, data) => {

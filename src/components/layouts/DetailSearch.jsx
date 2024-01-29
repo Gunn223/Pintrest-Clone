@@ -1,6 +1,6 @@
 import { Button, ScrollView, StyleSheet, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { Search } from './Searchlayout';
+
 import MyCard from '../fragment/MyCard';
 import MyMiniCard from '../fragment/MyMiniCard';
 
@@ -20,7 +20,7 @@ const DetailSearch = ({ close, res }) => {
   return (
     <>
       <View>
-        <Text style={{ marginTop: 20 }}>DetailSearch</Text>
+        <Text style={{ marginTop: 20 }}></Text>
         <Button
           title="Close"
           onPress={handleCloseModal}
@@ -31,6 +31,7 @@ const DetailSearch = ({ close, res }) => {
           data.map((e, index) => (
             // console.log(e)
             <View
+              key={index}
               style={{
                 flexDirection: index % 2 === 0 ? 'row' : 'row-reverse',
                 justifyContent: 'space-around',

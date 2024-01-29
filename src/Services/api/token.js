@@ -1,4 +1,3 @@
-const ApiEndpoint = 'https://pixabay.com/api/';
-
-const token = '39824461-3e18dab629b833ede78c55a26';
+const ApiEndpoint = process.env.EXPO_PUBLIC_PIXABABY_API_URL;
+const token = process.env.EXPO_PUBLIC_PIXABABY_API_TOKEN;
 export { ApiEndpoint, token };

@@ -2,15 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, ScrollView, ActivityIndicator } from 'react-native';
 import MyCard from '../fragment/MyCard';
 import MyMiniCard from '../fragment/MyMiniCard';
-import { ShowsRandomImage, ShowsRandomImagemini } from '../../Services/api/Query';
+import { ShowsRandomImage, ShowsRandomImagemini, generateRandomWord } from '../../Services/api/Query';
 import ContentMainCard from '../fragment/ContentMainCard';
 
 const Homelayout = () => {
   const [items, setItems] = useState([]);
   const [itemsmini, setItemsmini] = useState([]);
+  const [datacardMini, setDataCardMini] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [dataRand, setDataRand] = useState(['bird', 'dog', 'beauty-girl', 'meme']);
-
+  const RandWord = generateRandomWord();
   useEffect(() => {
     ShowsRandomImage((data) => {
       const dataArray = data.hits;
@@ -22,10 +22,13 @@ const Homelayout = () => {
     });
   }, []);
   useEffect(() => {
-    ShowsRandomImagemini((data) => {
+    ShowsRandomImagemini(RandWord, (data) => {
       const dataArray = data.hits;
       if (dataArray && dataArray.length > 0) {
         setItemsmini(dataArray);
+        if (itemsmini.length > 0) {
+          setDataCardMini(dataArray);
+        }
       } else {
         setItemsmini([]);
       }
@@ -45,11 +48,13 @@ const Homelayout = () => {
         setItems((prevItems) => [...prevItems, ...dataArray]);
       }
     });
-    await ShowsRandomImagemini((data, i) => {
+
+    await ShowsRandomImagemini(RandWord, (data) => {
       const dataArray = data.hits;
 
       if (dataArray && dataArray.length > 0) {
         setItemsmini((prevItems) => [...prevItems, ...dataArray]);
+        setDataCardMini((prevItems) => [...prevItems, ...dataArray]);
       }
     });
 
@@ -60,7 +65,7 @@ const Homelayout = () => {
     <>
       <Text style={styles.text}>Semua</Text>
       <ScrollView
-        scrollEventThrottle={16} // Biasanya 16 adalah nilai yang baik untuk ini
+        scrollEventThrottle={16}
         onScroll={(e) => {
           const { layoutMeasurement, contentOffset, contentSize } = e.nativeEvent;
           const isEndReached = layoutMeasurement.height + contentOffset.y >= contentSize.height - 50; // Meningkatkan threshold untuk lebih responsif
@@ -79,37 +84,40 @@ const Homelayout = () => {
         <View style={styles.container}>
           <ContentMainCard>
             {items.length > 0 &&
-              items.map((e, index) => (
-                <View
-                  key={`${e.id}-${index}`}
-                  style={{
-                    flexDirection: index % 2 === 0 ? 'row' : 'row-reverse',
-                    justifyContent: 'space-around',
-                    marginBottom: 10, // Anda bisa menyesuaikan ini
-                  }}>
-                  <MyCard
-                    img={e.webformatURL}
-                    title={e.user}
-                    style={{ width: '48%' }} // Anda bisa menyesuaikan ini
-                  />
-                  <View>
-                    {itemsmini[index] && (
-                      <MyMiniCard
-                        img={itemsmini[index].webformatURL}
-                        title={itemsmini[index].user}
-                        style={{ width: '48%' }} // Anda bisa menyesuaikan ini
-                      />
-                    )}
-                    {itemsmini[index] && (
-                      <MyMiniCard
-                        img={itemsmini[index].webformatURL}
-                        title={itemsmini[index].user}
-                        style={{ width: '48%' }} // Anda bisa menyesuaikan ini
-                      />
-                    )}
+              items.slice(1).map((e, index) => {
+                const miniCardIndex = index + 1;
+                return (
+                  <View
+                    key={`${e.id}-${index}`}
+                    style={{
+                      flexDirection: index % 2 === 0 ? 'row' : 'row-reverse',
+                      justifyContent: 'space-around',
+                      marginBottom: 10,
+                    }}>
+                    <MyCard
+                      img={e.webformatURL}
+                      title={e.user}
+                      style={{ width: '48%' }}
+                    />
+                    <View>
+                      {itemsmini[index] && (
+                        <MyMiniCard
+                          img={itemsmini[index].webformatURL}
+                          title={itemsmini[index].user}
+                          style={{ width: '48%' }}
+                        />
+                      )}
+                      {datacardMini[miniCardIndex] && (
+                        <MyMiniCard
+                          img={datacardMini[miniCardIndex].webformatURL}
+                          title={datacardMini[miniCardIndex].user}
+                          style={{ width: '48%' }}
+                        />
+                      )}
+                    </View>
                   </View>
-                </View>
-              ))}
+                );
+              })}
           </ContentMainCard>
           {isLoading && (
             <ActivityIndicator
